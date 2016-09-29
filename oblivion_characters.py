@@ -31,14 +31,18 @@ The Shadow\nThe Tower\nThe Warrior\nThe Thief\nThe Moon\n""").title()
     def calc_sign(self, sign):
         if self.sign == "The Shadow":
             self.agility += 10
+            self.luck += 5
         elif self.sign == "The Tower":
             self.endurance +=10
+            self.willpower +=10
         elif self.sign == "The Warrior":
             self.strength += 10
+            self.endurance += 5
         elif self.sign == "The Thief":
-            self.luck == 10
-        else:
+            self.luck == 15
+        elif self.sign == "The Moon":
             self.intelligence += 10
+            self.willpower +=5
 
     def show_stats(self):
         print("""Your attributes are:\nStrength: {}\nEndurance: {}\nAgility: {}
@@ -47,6 +51,19 @@ Intelligence: {}\nWillpower: {}\nCharisma: {}\nLuck: {}\n
         print("""Your stats are:\nBlade: {}\nBlock: {}\nBlunt: {}\nBow: {}
 Heavy Armor: {}\nLight Armor: {}\nSneak: {}\nDestruct: {}\nHeal: {}\nSpeech: {}\nBarter: {}\n
 """.format(self.blade,self.block,self.blunt,self.bow,self.heavy_armor,self.light_armor,self.sneak,self.destruct,self.heal,self.speech,self.barter))
+
+    def focus_area(self):
+        self.blade += int((self.strength + self.agility + 2)/4)
+        self.block += int((self.strength + self.endurance)/4)
+        self.blunt += int((self.strength * 2)/3)
+        self.bow += int(((self.agility * 2)/4)+ self.luck/4)
+        self.heavy_armor += int((self.strength + self.endurance)/4)
+        self.light_armor += int((self.agility + self.endurance)/4)
+        self.sneak += int((self.agility + self.luck)/4)
+        self.destruct += int((self.intelligence + self.willpower)/4)
+        self.heal += int((self.willpower * 2.5)/4)
+        self.speech += int((self.charisma)/2)
+        self.barter += int((self.charisma + self.luck)/3)
 
 class Nord(Player):
     def __init__(self,name):
@@ -119,7 +136,7 @@ Spellsword\nScout\nArcher\nAssassin\nThief\nSorcerer\nMage\n""").title()
     return class_choice
 
 def ask_name_race():
-    name = input("Enter character name").title()
+    name = input("Enter character name\n-").title()
     race = input("Enter your characters race, Orc, Nord, Imperial, Redgaurd, Dark Elf, High Elf, Wood Elf, Argonian, or Khajit.\n-").title()
     if race == "Orc":
         player = Orc(name)
@@ -131,23 +148,24 @@ def ask_name_race():
         player = Redgaurd(name)
     elif race == "Dark Elf":
         player = DarkElf(name)
-    elif player == "High Elf":
+    elif race == "High Elf":
         player = HighElf(name)
-    elif player == "Wood Elf":
+    elif race == "Wood Elf":
         player = WoodElf(name)
-    elif player == "Argonian":
+    elif race == "Argonian":
         player = Argonian(name)
-    elif player == "Khajit":
+    elif race == "Khajit":
         player = Khajit(name)
     return player
 
 
 
 
-thing = ask_name_race()
-thing.calc_sign(thing.choose_sign())
-choice = ask_class(thing)
-the_class = CharacterClass(choice)
-the_class.stats(thing)
+person = ask_name_race()
 
-thing.show_stats()
+person.calc_sign(person.choose_sign())
+choice = ask_class(person)
+the_class = CharacterClass(choice)
+the_class.stats(person)
+person.focus_area()
+person.show_stats()
